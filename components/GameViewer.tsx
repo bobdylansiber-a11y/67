@@ -76,17 +76,61 @@ const GameViewer: React.FC<GameViewerProps> = ({ game, onClose }) => {
 
       <div 
         id="game-container"
-        className="relative flex-1 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-800"
+        className="relative flex-1 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-800 min-h-[400px]"
       >
         {isLoading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 z-10">
-            <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-400 animate-pulse text-sm font-medium">Connecting to game server...</p>
+          <div className="absolute inset-0 z-10 overflow-hidden bg-slate-950 flex flex-col items-center justify-center p-6 transition-opacity duration-500">
+            {/* Blurred Background Thumbnail Placeholder */}
+            <div 
+              className="absolute inset-0 opacity-20 blur-3xl scale-110"
+              style={{ 
+                backgroundImage: `url(${game.thumbnail})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            ></div>
+            
+            {/* Skeleton Overlay */}
+            <div className="relative z-20 flex flex-col items-center w-full max-w-lg">
+              <div className="w-full aspect-[4/3] bg-slate-900/80 rounded-2xl border border-slate-800 shadow-2xl flex flex-col items-center justify-center overflow-hidden relative group">
+                {/* Pulsing Skeleton Shapes */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sky-500/50 to-transparent animate-pulse"></div>
+                
+                <div className="w-16 h-16 border-4 border-slate-800 border-t-sky-500 rounded-full animate-spin mb-6"></div>
+                
+                <div className="space-y-3 w-2/3 flex flex-col items-center">
+                  <div className="h-4 bg-slate-800 rounded-full w-full animate-pulse"></div>
+                  <div className="h-4 bg-slate-800 rounded-full w-5/6 animate-pulse delay-100"></div>
+                  <div className="h-4 bg-slate-800 rounded-full w-4/6 animate-pulse delay-200"></div>
+                </div>
+
+                {/* Ambient glow */}
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-sky-500/10 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute -top-10 -left-10 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+              </div>
+
+              {/* Progress Bar and Status */}
+              <div className="mt-8 text-center space-y-4 w-full">
+                <div className="space-y-1">
+                  <h3 className="text-white font-bold tracking-tight text-lg animate-pulse">
+                    Synchronizing Portal...
+                  </h3>
+                  <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] font-mono">
+                    Node: Nexus-Edge-{game.id.toUpperCase()}
+                  </p>
+                </div>
+
+                <div className="h-1.5 w-full max-w-xs mx-auto bg-slate-800 rounded-full overflow-hidden border border-slate-700 relative">
+                  <div className="absolute inset-0 bg-sky-500/20 w-full animate-pulse"></div>
+                  <div className="h-full bg-sky-500 w-1/2 rounded-full animate-progress shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
         <iframe 
           src={game.iframeUrl}
-          className="w-full h-full border-none shadow-inner"
+          className={`w-full h-full border-none shadow-inner transition-opacity duration-1000 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           onLoad={() => setIsLoading(false)}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           title={game.title}
