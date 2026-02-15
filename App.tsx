@@ -8,6 +8,7 @@ import GameViewer from './components/GameViewer';
 import Sidebar from './components/Sidebar';
 
 const App: React.FC = () => {
+  const [hasEntered, setHasEntered] = useState(false);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<GameCategory | 'All'>('All');
@@ -48,8 +49,54 @@ const App: React.FC = () => {
     setSelectedGame(null);
   };
 
+  if (!hasEntered) {
+    return (
+      <div className="fixed inset-0 bg-[#020617] flex items-center justify-center overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[120px] -top-48 -left-48 animate-pulse"></div>
+        <div className="absolute w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px] -bottom-48 -right-48 animate-pulse delay-700"></div>
+        
+        <div className="relative z-10 text-center space-y-8 max-w-2xl px-6">
+          <div className="flex flex-col items-center">
+             <div className="w-24 h-24 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-[0_0_50px_rgba(56,189,248,0.3)] mb-8 animate-bounce">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-4 italic">
+              NEXUS<span className="text-sky-500">GAMES</span>
+            </h1>
+            <p className="text-slate-400 text-lg md:text-xl font-medium tracking-wide max-w-md">
+              The ultimate unblocked gaming experience. Fast, free, and unrestricted.
+            </p>
+          </div>
+
+          <button 
+            onClick={() => setHasEntered(true)}
+            className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-200 bg-sky-600 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 hover:bg-sky-500 shadow-[0_0_20px_rgba(14,165,233,0.4)]"
+          >
+            <span className="relative flex items-center gap-3 text-xl tracking-widest">
+              ENTER PORTAL
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </span>
+          </button>
+
+          <div className="pt-12 flex justify-center gap-8 text-slate-500 text-sm font-bold uppercase tracking-widest">
+            <span className="flex items-center gap-2">
+               <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+               1,240 Players Online
+            </span>
+            <span>45+ Games Ready</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col transition-colors duration-300">
+    <div className="min-h-screen flex flex-col transition-colors duration-300 animate-in fade-in duration-1000">
       <Navbar 
         searchQuery={searchQuery} 
         setSearchQuery={setSearchQuery} 
